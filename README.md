@@ -12,7 +12,7 @@ proxy-freeze
 [standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
 [standard-url]: http://npm.im/standard
 
-A simple way to freeze JavaScript objects.
+A simple way to freeze JavaScript objects and know of attempted modifications.
 
 Why?
 ----

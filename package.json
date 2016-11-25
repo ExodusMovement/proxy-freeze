@@ -1,6 +1,6 @@
 {
   "name": "proxy-freeze",
-  "description": "Freeze JavaScript objects.",
+  "description": "Simple way to freeze JavaScript objects and know of attempted modifications",
   "version": "0.0.0",
   "author": "JP Richardson <jprichardson@gmail.com>",
   "bugs": {
