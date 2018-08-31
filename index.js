@@ -8,7 +8,7 @@ const proxyHandler = {
     const msg = `Trying to set value of property (${prop}) of frozen object.`
     // browser?
     if (typeof process === 'undefined') {
-      (console.warn.bind(console) || console.error.bind(console) || console.log.bind(console))(msg)
+      (console.warn || console.error || console.log).bind(console)(msg);
     } else {
       process.emitWarning(msg, 'ProxyFreezeWarning')
     }
