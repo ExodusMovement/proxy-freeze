@@ -38,7 +38,7 @@ function proxyFreeze (target, { addProxyIdentifier = false, preventRefreeze = fa
     throw new Error('cannot use preventRefreeze without addProxyIdentifier.')
   }
 
-  if (preventRefreeze && target?.[proxyIdentifier]) return target
+  if (preventRefreeze && target && target[proxyIdentifier]) return target
   if (addProxyIdentifier) return new Proxy(target, identifiableProxyHandler)
   return new Proxy(target, proxyHandler)
 }
