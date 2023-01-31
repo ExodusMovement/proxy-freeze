@@ -24,14 +24,21 @@ const identifiableProxyHandler = {
   }
 }
 
-function proxyFreeze (target, { addProxyIdentifier = false } = {}) {
+function proxyFreeze (target, { addProxyIdentifier = false, preventRefreeze = false } = {}) {
   if (typeof target !== 'function' && typeof target !== 'object') {
     throw new Error('proxyFreeze only supports constructor functions or objects.')
   }
   if (typeof addProxyIdentifier !== 'boolean') {
     throw new TypeError('addProxyIdentifier needs to be a boolean.')
   }
+  if (typeof preventRefreeze !== 'boolean') {
+    throw new TypeError('preventRefreeze needs to be a boolean.')
+  }
+  if (preventRefreeze && !addProxyIdentifier) {
+    throw new Error('cannot use preventRefreeze without addProxyIdentifier.')
+  }
 
+  if (preventRefreeze && target?.[proxyIdentifier]) return target
   if (addProxyIdentifier) return new Proxy(target, identifiableProxyHandler)
   return new Proxy(target, proxyHandler)
 }

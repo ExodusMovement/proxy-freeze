@@ -67,3 +67,45 @@ test('should identify proxy if addProxyIdentifier is true', t => {
   t.is(obj2[proxyFreeze.proxyIdentifier], true, 'Proxy is identified')
   t.end()
 })
+
+test('cannot use preventRefreeze without addProxyIdentifier', t => {
+  t.plan(2)
+
+  let obj = {
+    name: 'jp'
+  }
+
+  t.throws(() => proxyFreeze(obj, { preventRefreeze: true }), 'cannot use preventRefreeze without addProxyIdentifier.')
+  let obj2 = proxyFreeze(obj, { preventRefreeze: true, addProxyIdentifier: true })
+  t.is(obj2[proxyFreeze.proxyIdentifier], true, 'can use preventRefreeze with addProxyIdentifier.')
+
+  t.end()
+})
+
+test('shoud not re-freeze if preventRefreeze is true', t => {
+  t.plan(1)
+
+  let obj = {
+    name: 'jp'
+  }
+
+  let obj2 = proxyFreeze(obj, { preventRefreeze: true, addProxyIdentifier: true })
+  let obj3 = proxyFreeze(obj2, { preventRefreeze: true, addProxyIdentifier: true })
+  t.is(obj2, obj3, 'we don\'t re-freeze.')
+
+  t.end()
+})
+
+test('shoud re-freeze if preventRefreeze is false', t => {
+  t.plan(1)
+
+  let obj = {
+    name: 'jp'
+  }
+
+  let obj2 = proxyFreeze(obj)
+  let obj3 = proxyFreeze(obj2)
+  t.isNot(obj2, obj3, 'we re-freeze.')
+
+  t.end()
+})

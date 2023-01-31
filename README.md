@@ -35,7 +35,8 @@ Usage
 
 - **target**: can be either an `object` or constructor `function`
 - **options**
-   - **addProxyIdentifier**: `boolean`, adds a symbol getter that detects Proxies created via this method
+   - **addProxyIdentifier**: `boolean`, adds a symbol getter that detects Proxies created via this method. Defaults to `false`.
+   - **preventRefreeze**: `boolean`, uses symbol added via `addProxyIdentifier` to identify frozen Proxies and doesn't re-freeze them. Defaults to `false`.
 
 ```js
 let obj = {
