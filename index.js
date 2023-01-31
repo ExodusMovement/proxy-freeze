@@ -38,7 +38,17 @@ function proxyFreeze (target, { addProxyIdentifier = false, preventRefreeze = fa
     throw new Error('cannot use preventRefreeze without addProxyIdentifier.')
   }
 
-  if (preventRefreeze && target && target[proxyIdentifier]) return target
+  if (target && target[proxyIdentifier]) {
+    if (preventRefreeze) return target
+
+    const msg = 'Trying to freeze an already frozen object.'
+    if (typeof process === 'undefined') {
+      (console.warn.bind(console) || console.error.bind(console) || console.log.bind(console))(msg)
+    } else {
+      process.emitWarning(msg, 'ProxyFreezeWarning')
+    }
+  }
+
   if (addProxyIdentifier) return new Proxy(target, identifiableProxyHandler)
   return new Proxy(target, proxyHandler)
 }
