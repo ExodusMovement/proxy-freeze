@@ -39,3 +39,31 @@ test('should freeze objects from constructor', t => {
 
   t.is(p.name, 'jp', 'name didnt change')
 })
+
+test('should not identify proxy if addProxyIdentifier not set or false', t => {
+  t.plan(2)
+
+  let obj = {
+    name: 'jp'
+  }
+
+  let obj2 = proxyFreeze(obj)
+  t.is(obj2[proxyFreeze.proxyIdentifier], undefined, 'Proxy is not identified')
+
+  let obj3 = proxyFreeze(obj, { addProxyIdentifier: false })
+  t.is(obj3[proxyFreeze.proxyIdentifier], undefined, 'Proxy is not identified')
+  t.end()
+})
+
+test('should identify proxy if addProxyIdentifier is true', t => {
+  t.plan(1)
+
+  let obj = {
+    name: 'jp'
+  }
+
+  let obj2 = proxyFreeze(obj, { addProxyIdentifier: true })
+
+  t.is(obj2[proxyFreeze.proxyIdentifier], true, 'Proxy is identified')
+  t.end()
+})

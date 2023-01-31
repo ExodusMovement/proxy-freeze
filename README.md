@@ -31,9 +31,11 @@ Install
 Usage
 -----
 
-### proxyFreeze(target)
+### proxyFreeze(target, options)
 
 - **target**: can be either an `object` or constructor `function`
+- **options**
+   - **addProxyIdentifier**: `boolean`, adds a symbol getter that detects Proxies created via this method
 
 ```js
 let obj = {

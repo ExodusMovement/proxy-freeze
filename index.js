@@ -1,3 +1,4 @@
+const proxyIdentifier = Symbol('proxy-freeze-identifier')
 
 const proxyHandler = {
   construct: (Target, args) => {
@@ -15,12 +16,25 @@ const proxyHandler = {
   }
 }
 
-function proxyFreeze (target) {
+const identifiableProxyHandler = {
+  ...proxyHandler,
+  get: (target, key) => {
+    if (key === proxyIdentifier) return true
+    return target[key]
+  }
+}
+
+function proxyFreeze (target, { addProxyIdentifier = false } = {}) {
   if (typeof target !== 'function' && typeof target !== 'object') {
     throw new Error('proxyFreeze only supports constructor functions or objects.')
   }
+  if (typeof addProxyIdentifier !== 'boolean') {
+    throw new TypeError('addProxyIdentifier needs to be a boolean.')
+  }
 
+  if (addProxyIdentifier) return new Proxy(target, identifiableProxyHandler)
   return new Proxy(target, proxyHandler)
 }
 
 module.exports = proxyFreeze
+module.exports.proxyIdentifier = proxyIdentifier
