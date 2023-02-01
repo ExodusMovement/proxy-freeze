@@ -1,18 +1,21 @@
 const proxyIdentifier = Symbol('proxy-freeze-identifier')
 
+const warn = (msg) => {
+  // browser?
+  if (typeof process === 'undefined') {
+    (console.warn.bind(console) || console.error.bind(console) || console.log.bind(console))(msg)
+  } else {
+    process.emitWarning(msg, 'ProxyFreezeWarning')
+  }
+}
+
 const proxyHandler = {
   construct: (Target, args) => {
     return new Proxy(new Target(...args), proxyHandler)
   },
 
   set: (target, prop, val) => {
-    const msg = `Trying to set value of property (${prop}) of frozen object.`
-    // browser?
-    if (typeof process === 'undefined') {
-      (console.warn.bind(console) || console.error.bind(console) || console.log.bind(console))(msg)
-    } else {
-      process.emitWarning(msg, 'ProxyFreezeWarning')
-    }
+    warn(`Trying to set value of property (${prop}) of frozen object.`)
   }
 }
 
@@ -41,12 +44,7 @@ function proxyFreeze (target, { addProxyIdentifier = false, preventRefreeze = fa
   if (target && target[proxyIdentifier]) {
     if (preventRefreeze) return target
 
-    const msg = 'Trying to freeze an already frozen object.'
-    if (typeof process === 'undefined') {
-      (console.warn.bind(console) || console.error.bind(console) || console.log.bind(console))(msg)
-    } else {
-      process.emitWarning(msg, 'ProxyFreezeWarning')
-    }
+    warn('Trying to freeze an already frozen object.')
   }
 
   if (addProxyIdentifier) return new Proxy(target, identifiableProxyHandler)
